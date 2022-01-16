@@ -1,7 +1,9 @@
 Kinetic Diagram Analysis Examples
 ====================================
+[//]: # (Badges)
+![CI](https://github.com/Becksteinlab/kda-examples/actions/workflows/main_ci.yml/badge.svg)
 
-Example code/notebooks for building models using [Kinetic Diagram Analysis](https://github.com/Becksteinlab/kda).
+Example code for building models using [Kinetic Diagram Analysis](https://github.com/Becksteinlab/kda).
 
 ## Examples
 
@@ -23,7 +25,11 @@ this package (instructions below) and run `pytest`.
 
 To install the latest development version from source, run
 ```bash
-git clone git@becksteinlab.physics.asu.edu:nawtrey/kda-examples.git
+git clone git@github.com:Becksteinlab/kda-examples.git
 cd kda-examples
 python setup.py install
 ```
+
+## Copyright
+
+Copyright (c) 2022, Nikolaus Awtrey
