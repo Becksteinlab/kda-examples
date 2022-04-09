@@ -13,7 +13,7 @@ def _flatten_flux_diagrams(diagrams):
     return flux_diagrams
 
 
-def generate_diagrams(input_mat, node_positions, save_path, gen_flux_diagrams=True):
+def generate_diagrams(input_mat, node_positions, save_path, gen_flux_diagrams=True, n_rows=None):
     """
     Constructs a kinetic diagram based on the input matrix, generates the
     partial, directional, and flux diagrams for that diagram, and stores
@@ -36,7 +36,23 @@ def generate_diagrams(input_mat, node_positions, save_path, gen_flux_diagrams=Tr
         Binary used to conveniently switch on/off the flux diagram generation
         since some models do not have any flux diagrams.
 
+    n_rows: int
+        Number of rows to use when plotting partial and directional diagram
+        panels. If no value is provided (i.e. `None`), the partial diagram
+        panel rows will be set to 1, and the directional diagram panel rows
+        will be set to the number of states to allow for easy comparison
+        between figures. The flux diagram panel is left alone since the flux
+        diagrams are less numerous.
+
     """
+    if n_rows is None:
+        # set partial diagram panel rows to 1
+        partial_rows = 1
+        # set directional diagram panel rows to number of states
+        directional_rows = input_mat.shape[0]
+    else:
+        partial_rows = n_rows
+        directional_rows = n_rows
 
     # initialize an empty graph object
     G = nx.MultiDiGraph()
@@ -64,7 +80,7 @@ def generate_diagrams(input_mat, node_positions, save_path, gen_flux_diagrams=Tr
         pos=node_positions,
         path=save_path,
         label="partial",
-        rows=1
+        rows=partial_rows,
     )
     # plot and save the directional diagrams as a panel
     plotting.draw_diagrams(
@@ -73,7 +89,7 @@ def generate_diagrams(input_mat, node_positions, save_path, gen_flux_diagrams=Tr
         path=save_path,
         cbt=True,
         label="directional",
-        rows=input_mat.shape[0],
+        rows=directional_rows,
     )
     if gen_flux_diagrams:
         # plot and save the flux diagrams as a panel
