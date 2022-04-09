@@ -12,6 +12,10 @@ Example code for building models using [Kinetic Diagram Analysis](https://github
 <img src="kda_examples/test_model_6_state/diagrams/input.png" width=300, alt="test model 6-state"> <img src="kda_examples/test_model_6_state_leakage/diagrams/input.png" width=300, alt="test model 6-state leakage">
 <img src="kda_examples/test_model_8_state_leakage/diagrams/input.png" width=300, alt="test model 8-state leakage">
 
+## Adding Examples
+
+See [PR #2](https://github.com/Becksteinlab/kda-examples/pull/2) for example on the minimum requirements for adding new examples to the repo.
+
 ## Testing
 
 This package has a testing module that checks if the example scripts execute
