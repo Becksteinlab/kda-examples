@@ -13,7 +13,7 @@ def _flatten_flux_diagrams(diagrams):
     return flux_diagrams
 
 
-def generate_diagrams(input_mat, node_positions, save_path, gen_flux_diagrams=True, n_rows=None):
+def generate_diagrams(input_mat, node_positions, save_path, gen_flux_diagrams=True, set_panel_rows=True):
     """
     Constructs a kinetic diagram based on the input matrix, generates the
     partial, directional, and flux diagrams for that diagram, and stores
@@ -36,23 +36,24 @@ def generate_diagrams(input_mat, node_positions, save_path, gen_flux_diagrams=Tr
         Binary used to conveniently switch on/off the flux diagram generation
         since some models do not have any flux diagrams.
 
-    n_rows: int
-        Number of rows to use when plotting partial and directional diagram
-        panels. If no value is provided (i.e. `None`), the partial diagram
-        panel rows will be set to 1, and the directional diagram panel rows
-        will be set to the number of states to allow for easy comparison
-        between figures. The flux diagram panel is left alone since the flux
-        diagrams are less numerous.
+    set_panel_rows: bool
+        Binary used to determine whether partial and directional diagram
+        panels have 1 row and `n_states` rows, respectively (`True`), or
+        use the `draw_diagrams()` built-in method for determining panel
+        dimensions (`False`). Default is `True`.
 
     """
-    if n_rows is None:
+    if set_panel_rows:
         # set partial diagram panel rows to 1
         partial_rows = 1
         # set directional diagram panel rows to number of states
         directional_rows = input_mat.shape[0]
     else:
-        partial_rows = n_rows
-        directional_rows = n_rows
+        # pass `None` so the panel dimensions are set by
+        # `plotting.draw_diagrams()`. This will generate
+        # a panel that is roughly square
+        partial_rows = None
+        directional_rows = None
 
     # initialize an empty graph object
     G = nx.MultiDiGraph()
