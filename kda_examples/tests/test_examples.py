@@ -12,7 +12,7 @@ from kda_examples.test_model_4_state_leakage.script import main as tm_4_state_le
 from kda_examples.test_model_5_state_leakage.script import main as tm_5_state_leakage
 from kda_examples.test_model_6_state.script import main as tm_6_state
 from kda_examples.test_model_6_state_leakage.script import main as tm_6_state_leakage
-
+from kda_examples.test_model_8_state_leakage.script import main as tm_8_state_leakage
 
 class TestModelTesting:
 
@@ -45,3 +45,8 @@ class TestModelTesting:
         with tmpdir.as_cwd():
             os.mkdir("diagrams")
             tm_6_state_leakage()
+
+    def test_8_state_leakage(self, tmpdir):
+        with tmpdir.as_cwd():
+            os.mkdir("diagrams")
+            tm_8_state_leakage()
