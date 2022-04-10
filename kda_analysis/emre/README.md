@@ -4,7 +4,7 @@ Code to analyze the EmrE [free-exchange transport model](https://doi.org/10.1085
 
 ## Usage
 
-**Warning:** KDA is in flux and not API stable. The latest known working KDA commit hash: `4f3153bf`
+**Warning:** KDA is in flux and not API stable. The latest known working KDA commit hash: `16fcb78`
 
 With KDA installed, the analysis code can be executed the following way:
 
