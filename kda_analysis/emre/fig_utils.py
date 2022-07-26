@@ -261,7 +261,7 @@ def plot_data(df, fig_key):
     elif fig_key == "9":
         fig, axs = plot_fig_9(df=df)
 
-    plt.suptitle(f"Hussey et al. Fig. {fig_key}", fontsize=11)
+    plot_stoichiometric_ratio(df=df, fig_key=fig_key, fig=fig, axs=axs)
 
     x_data_key = df.columns[0]
     if fig_key == "9":
@@ -269,7 +269,13 @@ def plot_data(df, fig_key):
     else:
         x_label = "R" + r"$_\mathrm{%s}$" % (x_data_key[2:])
 
-    axs[-1].set_xlabel(x_label)
+    # mute the top subplot's xticklabels
+    plt.setp(axs[-1].get_xticklabels(), visible=False)
+
+    if fig_key == "7A":
+        fig.legend(loc="upper right", bbox_to_anchor=(0.96, 0.96))
+    elif fig_key == "9":
+        fig.legend(loc="upper right", bbox_to_anchor=(0.97, 0.53))
 
     if fig_key in ["7A", "9"]:
         axs[0].set_ylabel(r"Flux (s$^{-1}$)")
@@ -279,25 +285,28 @@ def plot_data(df, fig_key):
     return fig
 
 
-def plot_stoichiometric_ratio(df, fig_key):
+def plot_stoichiometric_ratio(df, fig_key, fig, axs):
     colors = ["#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e"]
 
-    fig = plt.figure(figsize=(4, 3), tight_layout=True)
-    ax = fig.add_subplot(111)
-    ax.set_title(f"Fig. {fig_key} Stoichiometric Ratio", fontsize=11)
+    if fig_key in ["7B", "7D"]:
+        ax = fig.add_subplot(313, sharex=axs[0])
+    else:
+        ax = fig.add_subplot(212, sharex=axs[0])
+
+    # ax.set_title(f"Fig. {fig_key} Stoichiometric Ratio", fontsize=11)
 
     column_keys = df.columns
     H_flux_key = column_keys[-2]
     D_flux_key = column_keys[-1]
 
     H_str = "J" + r"$_{\mathrm{H}^{+}}$"
-    D_str = "J" + r"$_\mathrm{Drug}$"
+    D_str = "J" + r"$_\mathrm{D}$"
     label = D_str + "/" + H_str
 
     if fig_key == "7A":
         x_vals = df["R_AA"].values
         y_vals = df[D_flux_key].values / df[H_flux_key].values
-        ax.plot(x_vals, y_vals, color=colors[0], label=label)
+        ax.plot(x_vals, y_vals, color="dimgrey", label=label)
         ax.axvline(
             x=1,
             ymin=0,
@@ -367,7 +376,7 @@ def plot_stoichiometric_ratio(df, fig_key):
         pH_key = df.columns[0]
         x_vals = df[pH_key].values
         y_vals = df[D_flux_key].values / df[H_flux_key].values
-        ax.semilogx(x_vals, y_vals, color=colors[0], label=label)
+        ax.semilogx(x_vals, y_vals, color="dimgrey", label=label)
         ax.axvline(x=7.4, ymin=0, ymax=1, ls="--", color="black", label=r"pH = 7.4")
         x_ticks = np.linspace(5.4, 9.4, 5)
         ax.set_xticks(x_ticks, minor=False)
@@ -382,7 +391,7 @@ def plot_stoichiometric_ratio(df, fig_key):
         x_label = "R" + r"$_\mathrm{%s}$" % (x_data_key[2:])
     ax.set_xlabel(x_label)
     ax.set_ylabel("Stoichiometric Ratio")
-    ax.legend(bbox_to_anchor=(1, 1), loc="upper left", title=legend_title)
+    # ax.legend(bbox_to_anchor=(1, 1), loc="upper left", title=legend_title)
     ax.grid(True)
 
     if fig_key != "9":
@@ -398,8 +407,6 @@ def plot_stoichiometric_ratio(df, fig_key):
         ax.set_xticklabels(xticks)
         logfmt = mpl.ticker.LogFormatterSciNotation(base=10.0, labelOnlyBase=True)
         ax.xaxis.set_major_formatter(logfmt)
-
-    return fig
 
 
 def get_unique_idx_pairs(G):
@@ -505,7 +512,6 @@ def generate_flux_graph(
     fig = plt.figure(figsize=(3, 2), constrained_layout=True)
     spec = fig.add_gridspec(ncols=2, nrows=1, width_ratios=[2, 1])
     ax = fig.add_subplot(spec[0, 0])
-    ax.set_title(title, fontsize=10)
     ax.axis("off")
 
     node_list = list(G.nodes)
@@ -626,6 +632,7 @@ def generate_flux_graph(
         loc="center",
         bbox_to_anchor=(0.5, 0.5),
         handles=legend_elements,
+        title=title,
     )
     return fig
 
@@ -708,18 +715,14 @@ def plot_flux_graphs(df, fig_key):
             R_AA = row["k17"] / row["k19"]
             if R_AA == 1:
                 is_max_flux = True
-            title_str = (
-                f"Fig. {fig_key}, " + r"$\mathrm{R}_\mathrm{AA} = $" + f"{R_AA:.0e}"
-            )
+            title_str = r"$\mathrm{R}_\mathrm{AA} = $" + f"{R_AA:.0e}"
             filename = f"fig_{fig_key}_flux_diagram_RAA_{R_AA:.0E}.pdf"
         elif fig_key == "7B":
             R_off = row["k2"] / row["k6"]
             if R_off == 1:
                 is_max_flux = True
             k_AA = row["k17"]
-            title_str = (
-                f"Fig. {fig_key}, " + r"$\mathrm{R}_\mathrm{off} = $" + f"{R_off:.0e}"
-            )
+            title_str = r"$\mathrm{R}_\mathrm{off} = $" + f"{R_off:.0e}"
             filename = f"fig_{fig_key}_flux_diagram_kAA_{k_AA:.0E}_Roff_{R_off:.0E}.pdf"
 
         data_dict["max_flux_case"].append(is_max_flux)

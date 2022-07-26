@@ -290,8 +290,8 @@ def sub_dict_9_values():
 
 
 def plot_fig_9(df):
-    fig = plt.figure(figsize=(4, 3), tight_layout=True)
-    ax = fig.add_subplot(111)
+    fig = plt.figure(figsize=(4, 4), tight_layout=True)
+    ax = fig.add_subplot(211)
 
     column_keys = df.columns
     pH_key = column_keys[0]
@@ -320,6 +320,5 @@ def plot_fig_9(df):
     ax.set_xticks([], minor=True)
     ax.set_xticklabels(x_ticks)
 
-    ax.axvline(x=7.4, ymin=0, ymax=1, ls="--", color="black", label=r"pH = 7.4")
-    plt.legend(bbox_to_anchor=(1, 1), loc="upper left", ncol=1)
+    ax.axvline(x=7.4, ymin=0, ymax=1, ls="--", color="black")
     return fig, [ax]

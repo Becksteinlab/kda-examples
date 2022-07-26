@@ -268,21 +268,21 @@ def sub_dict_7a_values():
 
 
 def plot_fig_7A(df):
-    fig = plt.figure(figsize=(4, 3), tight_layout=True)
-    ax = fig.add_subplot(111)
+    fig = plt.figure(figsize=(4, 4), tight_layout=True)
+    ax = fig.add_subplot(211)
 
     column_keys = df.columns
     H_flux_key = column_keys[-2]
     D_flux_key = column_keys[-1]
 
-    H_colour = "#A02020"
-    D_colour = "#6BE35D"
+    H_colour = "#41b6c4"
+    D_colour = "#a1dab4"
     ax.semilogx(
         df["R_AA"].values,
         df[H_flux_key].values,
         ls="-",
         color=H_colour,
-        label=r"$\mathrm{J}_\mathrm{H}$",
+        label="J" + r"$_{\mathrm{H}^{+}}$",
     )
     ax.semilogx(
         df["R_AA"].values,
@@ -298,7 +298,5 @@ def plot_fig_7A(df):
         ymax=1,
         ls="--",
         color="black",
-        label=r"$\mathrm{R}_\mathrm{AA}$ = 1",
     )
-    plt.legend(bbox_to_anchor=(1, 1), loc="upper left", ncol=1)
     return fig, [ax]

@@ -230,10 +230,10 @@ def rect_label(color):
 
 def plot_fig_7B(df, colors):
 
-    fig = plt.figure(figsize=(4, 3), tight_layout=True)
+    fig = plt.figure(figsize=(4, 4), tight_layout=True)
     ax = fig.add_subplot(111)  # big subplot
-    axH = fig.add_subplot(211)
-    axD = fig.add_subplot(212, sharex=axH)
+    axH = fig.add_subplot(311)
+    axD = fig.add_subplot(312, sharex=axH)
 
     # Turn off axis lines and ticks of the big subplot
     ax.spines["top"].set_color("none")
@@ -291,14 +291,14 @@ def plot_fig_7B(df, colors):
         axD.plot(
             R_off_data[mask],
             D_flux_data[mask],
-            ls="--",
+            ls="-",
             lw=linewidth,
             color=color,
             label=label,
         )
 
-    axH.set_ylabel(r"$\mathrm{H}^{+}$" + " Flux (s$^{-1}$)", fontsize=7)
-    axD.set_ylabel(r"Drug Flux (s$^{-1}$)", fontsize=7)
+    axH.set_ylabel(r"$\mathrm{H}^{+}$" + " Flux (s$^{-1}$)")
+    axD.set_ylabel(r"Drug Flux (s$^{-1}$)")
 
     _, labels = axH.get_legend_handles_labels()
     ax.legend(

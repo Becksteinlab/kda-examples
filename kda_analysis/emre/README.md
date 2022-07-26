@@ -12,7 +12,6 @@ With KDA installed, the analysis code can be executed the following way:
 # create directory structure for storing plots
 mkdir plots
 mkdir plots/figures
-mkdir plots/stoichiometric_ratio
 mkdir plots/flux_graphs
 # generate all figures
 python generate_figures.py

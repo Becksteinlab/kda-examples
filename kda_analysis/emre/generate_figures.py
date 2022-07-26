@@ -70,12 +70,6 @@ def main(fig_list, check_thermo_con):
         plt.savefig(save_path, dpi=300)
         plt.close()
 
-        eff_fig = fig_utils.plot_stoichiometric_ratio(df=plot_df, fig_key=fig_key)
-        save_path = f"plots/stoichiometric_ratio/fig_{fig_key}.png"
-        print(f"--> Saving Fig. {fig_key} at location: {save_path}")
-        plt.savefig(save_path, dpi=300)
-        plt.close()
-
         supported_figs = ["7A", "7B"]
         if fig_key in supported_figs:
             data_dict = fig_utils.plot_flux_graphs(df=df_fig, fig_key=fig_key)
