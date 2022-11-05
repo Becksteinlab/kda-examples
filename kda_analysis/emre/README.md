@@ -14,5 +14,6 @@ mkdir plots
 mkdir plots/figures
 mkdir plots/flux_graphs
 # generate all figures
+python plot_emre_8_state.py
 python generate_figures.py
 ```
