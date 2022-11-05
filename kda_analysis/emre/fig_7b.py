@@ -262,7 +262,7 @@ def plot_fig_7B(df, colors):
         ls="--",
         lw=0.8,
         color="black",
-        label=r"$\mathrm{R}_\mathrm{off}$ = 1",
+        label=r"$R_\mathrm{off}$ = 1",
     )
     axD.axvline(
         x=1,
@@ -271,7 +271,7 @@ def plot_fig_7B(df, colors):
         ls="--",
         lw=0.8,
         color="black",
-        label=r"$\mathrm{R}_\mathrm{off}$ = 1",
+        label=r"$R_\mathrm{off}$ = 1",
     )
 
     rect_handles = [rect_label(color="black")]
@@ -279,7 +279,7 @@ def plot_fig_7B(df, colors):
         mask = k_AA_data == val
         color = colors[i]
         rect_handles.append(rect_label(color=color))
-        label = f"{val:.0e}"
+        label = f"{val:.0f}"
         axH.plot(
             R_off_data[mask],
             H_flux_data[mask],
@@ -306,7 +306,7 @@ def plot_fig_7B(df, colors):
         labels[::-1],
         bbox_to_anchor=(1, 0.5),
         loc="center left",
-        title=r"$\mathrm{k}_\mathrm{AA}$",
+        title=r"$k_\mathrm{AA}$ (s$^{-1}$)",
         handlelength=1,
         handleheight=1,
     )
