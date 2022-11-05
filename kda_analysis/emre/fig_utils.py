@@ -20,6 +20,19 @@ from fig_7d import data_7d, sub_dict_7d_values, plot_fig_7D
 from fig_9 import data_9, sub_dict_9_values, plot_fig_9
 
 
+def fmtscientific(x, decimals=0):
+    """
+    Formats a multiple of 10 in scientific notation (i.e. "$1 \times 10^3$").
+    """
+    if decimals == 0:
+        base = f"{x:.0e}".split("e")[0]
+    elif decimals == 1:
+        base = f"{x:.1e}".split("e")[0]
+    pwr = str(int(np.log10(x)))
+    fmt = r"$" + base + r"\times 10^{" + pwr + r"}$"
+    return fmt
+
+
 def get_K(
     k31=1,
     k13=1,
@@ -267,7 +280,7 @@ def plot_data(df, fig_key):
     if fig_key == "9":
         x_label = x_data_key
     else:
-        x_label = "R" + r"$_\mathrm{%s}$" % (x_data_key[2:])
+        x_label = r"$R_\mathrm{%s}$" % (x_data_key[2:])
 
     # mute the top subplot's xticklabels
     plt.setp(axs[-1].get_xticklabels(), visible=False)
@@ -299,8 +312,8 @@ def plot_stoichiometric_ratio(df, fig_key, fig, axs):
     H_flux_key = column_keys[-2]
     D_flux_key = column_keys[-1]
 
-    H_str = "J" + r"$_{\mathrm{H}^{+}}$"
-    D_str = "J" + r"$_\mathrm{D}$"
+    H_str = r"$J_{\mathrm{H}^{+}}$"
+    D_str = r"$J_\mathrm{D}$"
     label = D_str + "/" + H_str
 
     if fig_key == "7A":
@@ -313,7 +326,7 @@ def plot_stoichiometric_ratio(df, fig_key, fig, axs):
             ymax=1,
             ls="--",
             color="black",
-            label=r"$\mathrm{R}_\mathrm{AA}$ = 1",
+            label=r"$R_\mathrm{AA}$ = 1",
         )
         legend_title = None
 
@@ -341,9 +354,9 @@ def plot_stoichiometric_ratio(df, fig_key, fig, axs):
             ls="--",
             lw=0.8,
             color="black",
-            label=r"$\mathrm{R}_\mathrm{off}$ = 1",
+            label=r"$R_\mathrm{off}$ = 1",
         )
-        legend_title = r"$\mathrm{k}_\mathrm{AA}$"
+        legend_title = r"$k_\mathrm{AA}$"
 
     elif fig_key == "7D":
         x_vals = df["R_off"].values
@@ -369,9 +382,9 @@ def plot_stoichiometric_ratio(df, fig_key, fig, axs):
             ls="--",
             lw=0.8,
             color="black",
-            label=r"$\mathrm{R}_\mathrm{off}$ = 1",
+            label=r"$R_\mathrm{off}$ = 1",
         )
-        legend_title = r"$\mathrm{R}_\mathrm{AA}$"
+        legend_title = r"$R_\mathrm{AA}$"
     elif fig_key == "9":
         pH_key = df.columns[0]
         x_vals = df[pH_key].values
@@ -388,7 +401,7 @@ def plot_stoichiometric_ratio(df, fig_key, fig, axs):
     if fig_key == "9":
         x_label = x_data_key
     else:
-        x_label = "R" + r"$_\mathrm{%s}$" % (x_data_key[2:])
+        x_label = r"$R_\mathrm{%s}$" % (x_data_key[2:])
     ax.set_xlabel(x_label)
     ax.set_ylabel("Stoichiometric Ratio")
     # ax.legend(bbox_to_anchor=(1, 1), loc="upper left", title=legend_title)
@@ -509,8 +522,8 @@ def generate_flux_graph(
                 net_trans_fluxes.append(net_trans_flux)
                 net_trans_flux_edges.append((i, j))
 
-    fig = plt.figure(figsize=(3, 2), constrained_layout=True)
-    spec = fig.add_gridspec(ncols=2, nrows=1, width_ratios=[2, 1])
+    fig = plt.figure(figsize=(2, 3.5), constrained_layout=True)
+    spec = fig.add_gridspec(ncols=1, nrows=2, height_ratios=[2, 1])
     ax = fig.add_subplot(spec[0, 0])
     ax.axis("off")
 
@@ -587,12 +600,12 @@ def generate_flux_graph(
         bbox=bbox,
     )
 
-    J_min = r"$\mathrm{J}_\mathrm{min} =$"
-    J_max = r"$\mathrm{J}_\mathrm{max} =$"
-    tflux_min_label = J_min + f" {np.min(trans_fluxes):.1e}"
-    tflux_max_label = J_max + f" {np.max(trans_fluxes):.1e}"
-    ntflux_min_label = r"$\Delta$" + J_min + f" {np.min(net_trans_fluxes):.1e}"
-    ntflux_max_label = r"$\Delta$" + J_max + f" {np.max(net_trans_fluxes):.1e}"
+    J_min = r"$J_\mathrm{min} =$"
+    J_max = r"$J_\mathrm{max} =$"
+    tflux_min_label = J_min + fmtscientific(np.min(trans_fluxes), decimals=1)
+    tflux_max_label = J_max + fmtscientific(np.max(trans_fluxes), decimals=1)
+    ntflux_min_label = r"$\Delta$ " + J_min + fmtscientific(np.min(net_trans_fluxes), decimals=1)
+    ntflux_max_label = r"$\Delta$ " + J_max + fmtscientific(np.max(net_trans_fluxes), decimals=1)
 
     legend_elements = [
         Line2D(
@@ -625,7 +638,7 @@ def generate_flux_graph(
         ),
     ]
 
-    ax2 = fig.add_subplot(spec[0, 1])
+    ax2 = fig.add_subplot(spec[1, 0])
     ax2.axis("off")
 
     ax2.legend(
@@ -715,14 +728,14 @@ def plot_flux_graphs(df, fig_key):
             R_AA = row["k17"] / row["k19"]
             if R_AA == 1:
                 is_max_flux = True
-            title_str = r"$\mathrm{R}_\mathrm{AA} = $" + f"{R_AA:.0e}"
+            title_str = r"$R_\mathrm{AA} = $" + fmtscientific(R_AA)
             filename = f"fig_{fig_key}_flux_diagram_RAA_{R_AA:.0E}.pdf"
         elif fig_key == "7B":
             R_off = row["k2"] / row["k6"]
             if R_off == 1:
                 is_max_flux = True
             k_AA = row["k17"]
-            title_str = r"$\mathrm{R}_\mathrm{off} = $" + f"{R_off:.0e}"
+            title_str = r"$R_\mathrm{off} = $" + fmtscientific(R_off)
             filename = f"fig_{fig_key}_flux_diagram_kAA_{k_AA:.0E}_Roff_{R_off:.0E}.pdf"
 
         data_dict["max_flux_case"].append(is_max_flux)

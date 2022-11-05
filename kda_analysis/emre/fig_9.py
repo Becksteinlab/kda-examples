@@ -305,14 +305,14 @@ def plot_fig_9(df):
         df[H_flux_key].values,
         ls="-",
         color=H_colour,
-        label=r"J$_\mathrm{H}$",
+        label=r"$J_\mathrm{H}$",
     )
     ax.semilogx(
         df[pH_key].values,
         df[D_flux_key].values,
         ls="-",
         color=D_colour,
-        label=r"J$_\mathrm{D}$",
+        label=r"$J_\mathrm{D}$",
     )
 
     x_ticks = np.linspace(5.4, 9.4, 5)

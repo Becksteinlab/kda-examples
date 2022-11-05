@@ -282,14 +282,14 @@ def plot_fig_7A(df):
         df[H_flux_key].values,
         ls="-",
         color=H_colour,
-        label="J" + r"$_{\mathrm{H}^{+}}$",
+        label=r"$J_{\mathrm{H}^{+}}$",
     )
     ax.semilogx(
         df["R_AA"].values,
         df[D_flux_key].values,
         ls="-",
         color=D_colour,
-        label=r"$\mathrm{J}_\mathrm{D}$",
+        label=r"$J_\mathrm{D}$",
     )
 
     ax.axvline(

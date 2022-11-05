@@ -263,7 +263,7 @@ def plot_fig_7D(df, colors):
         ls="--",
         lw=0.8,
         color="black",
-        label=r"$\mathrm{R}_\mathrm{off}$ = 1",
+        label=r"$R_\mathrm{off}$ = 1",
     )
     axD.axvline(
         x=1,
@@ -272,7 +272,7 @@ def plot_fig_7D(df, colors):
         ls="--",
         lw=0.8,
         color="black",
-        label=r"$\mathrm{R}_\mathrm{off}$ = 1",
+        label=r"$R_\mathrm{off}$ = 1",
     )
 
     rect_handles = [rect_label(color="black")]
@@ -307,7 +307,7 @@ def plot_fig_7D(df, colors):
         labels[::-1],
         bbox_to_anchor=(1, 0.5),
         loc="center left",
-        title=r"$\mathrm{R}_\mathrm{AA}$",
+        title=r"$R_\mathrm{AA}$",
         handlelength=1,
         handleheight=1,
     )

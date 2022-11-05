@@ -16,6 +16,7 @@ if __name__ == "__main__":
     G = nx.MultiDiGraph()
     graph_utils.generate_edges(G, K)
 
+    all_cycles = graph_utils.find_all_unique_cycles(G)
     H_edges = [(0, 6, 0), (1, 7, 0)]
     D_edges = [(3, 5, 0), (1, 7, 0)]
     H_cycles_valid, H_cycles_invalid = op_flux.find_relevant_cycles(G, H_edges)
@@ -24,9 +25,23 @@ if __name__ == "__main__":
     node_pos = plotting_emre.get_node_positions()
 
     # make sure to run it from ~/EmrE directory
-    save_path = os.path.join(os.getcwd(), "plots/emre_8_state/")
+    save_path = os.path.join(os.getcwd(), "plots/figures/")
     print(f"Saving plots at location: {save_path}")
     plotting_kda.draw_diagrams(G, node_pos, path=save_path, label="emre_8_state_model")
+
+    plotting_kda.draw_cycles(
+        G,
+        all_cycles,
+        pos=node_pos,
+        panel=True,
+        panel_scale=2,
+        font_size=13,
+        rows=4,
+        cbt=True,
+        curved_arrows=True,
+        path=save_path,
+        label="all_cycles",
+    )
 
     plotting_kda.draw_cycles(
         G,
