@@ -268,7 +268,10 @@ def sub_dict_7a_values():
 
 
 def plot_fig_7A(df):
-    fig = plt.figure(figsize=(4, 4), tight_layout=True)
+    main_fig_width = 3.25 # inches
+    main_fig_height = 4.25 # inches
+    legend_width = 0.8125 # inches
+    fig = plt.figure(figsize=(main_fig_width, main_fig_height), tight_layout=True)
     ax = fig.add_subplot(211)
 
     column_keys = df.columns

@@ -78,7 +78,7 @@ def main(fig_list, check_thermo_con):
             ):
                 save_path = f"plots/flux_graphs/{filename}"
                 print(f"--> Saving Fig. {fig_key} at location: {save_path}")
-                flux_graph.savefig(save_path, dpi=300, bbox_inches="tight")
+                flux_graph.savefig(save_path, dpi=300)
                 plt.close()
 
 
