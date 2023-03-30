@@ -236,7 +236,7 @@ def get_op_cycle_flux_funcs(
         function was generated from the simplified SymPy expression.
     """
     # get the directional partial diagram (edges)
-    dir_par_edges = diagrams.generate_directional_partial_diagrams(G, return_edges=True)
+    dir_par_edges = diagrams.generate_directional_diagrams(G, return_edges=True)
     # use the directional partial diagram info to calculate sigma (normalization)
     sigma_str = calculations.calc_sigma(G, dir_par_edges, key=key, output_strings=True)
     # initialize an empty list for storing net cycle flux numerators

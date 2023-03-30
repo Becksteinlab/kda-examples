@@ -20,17 +20,23 @@ from fig_7d import data_7d, sub_dict_7d_values, plot_fig_7D
 from fig_9 import data_9, sub_dict_9_values, plot_fig_9
 
 
-def fmtscientific(x, decimals=0):
+def fmtscientific(x, sig_figs=0):
     """
     Formats a multiple of 10 in scientific notation (i.e. "$1 \times 10^3$").
     """
-    if decimals == 0:
-        base = f"{x:.0e}".split("e")[0]
-    elif decimals == 1:
-        base = f"{x:.1e}".split("e")[0]
-    pwr = str(int(np.log10(x)))
-    fmt = r"$" + base + r"\times 10^{" + pwr + r"}$"
-    return fmt
+    # start with python scientific notation
+    if sig_figs == 0:
+        sci_str = f"{x:.0e}"
+    elif sig_figs == 1:
+        sci_str = f"{x:.1e}"
+    # split the string into base and power
+    base, pwr = sci_str.split("e")
+    # cast as integer to remove the `+` signs and leading zeros
+    pwr = str(int(pwr))
+    # set in math text
+    formatted_str = r"$" + base + r"\times 10^{" + pwr + r"}$"
+
+    return formatted_str
 
 
 def get_K(
@@ -105,6 +111,8 @@ def get_rate_names(fig_key):
 
 
 def get_H_D_cos_dicts(G, K):
+    # H: 1 -> 7, 2 -> 8
+    # D: 4 -> 6, 2 -> 8
     H_edges = [(0, 6, 0), (1, 7, 0)]
     D_edges = [(3, 5, 0), (1, 7, 0)]
 
@@ -286,7 +294,19 @@ def plot_data(df, fig_key):
     plt.setp(axs[-1].get_xticklabels(), visible=False)
 
     if fig_key == "7A":
-        fig.legend(loc="upper right", bbox_to_anchor=(0.96, 0.96))
+        ax_leg = axs[1]
+        ax_leg.axis("off")
+        handles = []
+        labels = []
+        for _ax in fig.axes:
+            _handles, _labels = _ax.get_legend_handles_labels()
+            handles.extend(_handles)
+            labels.extend(_labels)
+        ax_leg.legend(handles, labels, loc="center", bbox_to_anchor=(0.5, 0.5))
+        fig_leg = ax_leg.get_figure()
+        for _ext in ("png", "pdf", "svg"):
+            fig_leg.savefig(f"plots/figures/fig_7A_legend.{_ext}", dpi=300)
+
     elif fig_key == "9":
         fig.legend(loc="upper right", bbox_to_anchor=(0.97, 0.53))
 
@@ -326,7 +346,7 @@ def plot_stoichiometric_ratio(df, fig_key, fig, axs):
             ymax=1,
             ls="--",
             color="black",
-            label=r"$R_\mathrm{AA}$ = 1",
+            # label=r"$R_\mathrm{AA}$ = 1",
         )
         legend_title = None
 
@@ -354,7 +374,7 @@ def plot_stoichiometric_ratio(df, fig_key, fig, axs):
             ls="--",
             lw=0.8,
             color="black",
-            label=r"$R_\mathrm{off}$ = 1",
+            # label=r"$R_\mathrm{off}$ = 1",
         )
         legend_title = r"$k_\mathrm{AA}$"
 
@@ -404,7 +424,6 @@ def plot_stoichiometric_ratio(df, fig_key, fig, axs):
         x_label = r"$R_\mathrm{%s}$" % (x_data_key[2:])
     ax.set_xlabel(x_label)
     ax.set_ylabel("Stoichiometric Ratio")
-    # ax.legend(bbox_to_anchor=(1, 1), loc="upper left", title=legend_title)
     ax.grid(True)
 
     if fig_key != "9":
@@ -509,7 +528,7 @@ def generate_flux_graph(
         J_rev = probs[j] * K[j, i]
         net_trans_flux = J_for - J_rev
 
-        if np.abs(net_trans_flux) > 0.1:
+        if np.abs(net_trans_flux) > 0.02:
             val = np.abs(net_trans_flux)
             label = f"{val:.2f}"
             ntflux_label_dict[(i, j)] = label
@@ -522,10 +541,18 @@ def generate_flux_graph(
                 net_trans_fluxes.append(net_trans_flux)
                 net_trans_flux_edges.append((i, j))
 
-    fig = plt.figure(figsize=(2, 3.5), constrained_layout=True)
-    spec = fig.add_gridspec(ncols=1, nrows=2, height_ratios=[2, 1])
-    ax = fig.add_subplot(spec[0, 0])
+    scale_factor = 1.25
+    diagram_side = 1.625 * scale_factor # inches
+    legend_height = 0.875 * scale_factor # inches
+    legend_width = 1.25 * scale_factor # inches
+
+    fig = plt.figure(figsize=(diagram_side, diagram_side))
+    ax = fig.add_subplot(111)
     ax.axis("off")
+
+    fig_leg = plt.figure(figsize=(legend_width, legend_height))
+    ax_leg = fig_leg.add_subplot(111)
+    ax_leg.axis("off")
 
     node_list = list(G.nodes)
 
@@ -556,7 +583,7 @@ def generate_flux_graph(
     bbox = dict(boxstyle="square, pad=0.2", fc="white", ec="black", lw=0.5, alpha=0.7)
 
     nx.draw_networkx_nodes(
-        G, node_pos, node_size=node_size, nodelist=node_list, node_color=arrow_color
+        G, node_pos, node_size=node_size, nodelist=node_list, node_color=arrow_color, ax=ax
     )
 
     nx.draw_networkx_edges(
@@ -569,6 +596,7 @@ def generate_flux_graph(
         arrowsize=arrowsize,
         arrowstyle=arrowstyle,
         connectionstyle="arc3, rad = 0.11",
+        ax=ax,
     )
 
     nx.draw_networkx_edges(
@@ -580,6 +608,7 @@ def generate_flux_graph(
         edge_color=ntflux_color,
         arrowsize=arrowsize,
         arrowstyle=arrowstyle,
+        ax=ax,
     )
 
     nx.draw_networkx_labels(
@@ -589,6 +618,7 @@ def generate_flux_graph(
         font_size=7,
         horizontalalignment="center",
         verticalalignment="center",
+        ax=ax,
     )
 
     nx.draw_networkx_edge_labels(
@@ -598,14 +628,15 @@ def generate_flux_graph(
         font_size=5.5,
         font_color="black",
         bbox=bbox,
+        ax=ax,
     )
 
     J_min = r"$J_\mathrm{min} =$"
     J_max = r"$J_\mathrm{max} =$"
-    tflux_min_label = J_min + fmtscientific(np.min(trans_fluxes), decimals=1)
-    tflux_max_label = J_max + fmtscientific(np.max(trans_fluxes), decimals=1)
-    ntflux_min_label = r"$\Delta$ " + J_min + fmtscientific(np.min(net_trans_fluxes), decimals=1)
-    ntflux_max_label = r"$\Delta$ " + J_max + fmtscientific(np.max(net_trans_fluxes), decimals=1)
+    tflux_min_label = J_min + fmtscientific(np.min(trans_fluxes), sig_figs=1)
+    tflux_max_label = J_max + fmtscientific(np.max(trans_fluxes), sig_figs=1)
+    ntflux_min_label = r"$\Delta$ " + J_min + fmtscientific(np.min(net_trans_fluxes), sig_figs=1)
+    ntflux_max_label = r"$\Delta$ " + J_max + fmtscientific(np.max(net_trans_fluxes), sig_figs=1)
 
     legend_elements = [
         Line2D(
@@ -638,16 +669,14 @@ def generate_flux_graph(
         ),
     ]
 
-    ax2 = fig.add_subplot(spec[1, 0])
-    ax2.axis("off")
-
-    ax2.legend(
+    ax_leg.legend(
         loc="center",
-        bbox_to_anchor=(0.5, 0.5),
+        bbox_to_anchor=(0.49, 0.5),
         handles=legend_elements,
         title=title,
     )
-    return fig
+    fig.subplots_adjust(bottom=0, top=1, left=0, right=1)
+    return fig, fig_leg
 
 
 def plot_flux_graphs(df, fig_key):
@@ -662,8 +691,13 @@ def plot_flux_graphs(df, fig_key):
         # just select one of the middle values
         selected_k_AA = 100
         new_df = df[df["k17"] == selected_k_AA]
-        n_datasets = new_df.shape[0]
-        subset_idx = np.linspace(0, n_datasets - 1, 5, dtype=np.int32)
+        R_off = new_df["k2"] / new_df["k6"]
+        R_off = R_off.reset_index(drop=True)
+        # values of interest
+        interest_vals = [1e-10, 1, 100]
+        # find the indices of the dataframe where R_off values
+        # are equal to the values of interest
+        subset_idx = [R_off.index[R_off == val].tolist()[0] for val in interest_vals]
         df_subset = new_df.iloc[subset_idx]
     else:
         raise NotImplementedError(f"Not implemented for Fig. {fig_key}")
@@ -729,17 +763,20 @@ def plot_flux_graphs(df, fig_key):
             if R_AA == 1:
                 is_max_flux = True
             title_str = r"$R_\mathrm{AA} = $" + fmtscientific(R_AA)
-            filename = f"fig_{fig_key}_flux_diagram_RAA_{R_AA:.0E}.pdf"
+            filename = f"fig_{fig_key}_flux_diagram_RAA_{R_AA:.0E}"
+            filename_leg = f"fig_{fig_key}_flux_diagram_RAA_{R_AA:.0E}_legend"
         elif fig_key == "7B":
             R_off = row["k2"] / row["k6"]
             if R_off == 1:
                 is_max_flux = True
             k_AA = row["k17"]
             title_str = r"$R_\mathrm{off} = $" + fmtscientific(R_off)
-            filename = f"fig_{fig_key}_flux_diagram_kAA_{k_AA:.0E}_Roff_{R_off:.0E}.pdf"
+            filename = f"fig_{fig_key}_flux_diagram_kAA_{k_AA:.0E}_Roff_{R_off:.0E}"
+            filename_leg = f"fig_{fig_key}_flux_diagram_kAA_{k_AA:.0E}_Roff_{R_off:.0E}_legend"
 
         data_dict["max_flux_case"].append(is_max_flux)
         data_dict["filenames"].append(filename)
+        data_dict["filenames"].append(filename_leg)
         data_dict["fig_titles"].append(title_str)
 
     sorted_tflux = np.sort(np.array(data_dict["trans_flux_ranges"]).flatten())
@@ -767,7 +804,7 @@ def plot_flux_graphs(df, fig_key):
             tflux_range = (tmp_sorted_tflux[0], tmp_sorted_tflux[-1])
             ntflux_range = (tmp_sorted_ntflux[0], tmp_sorted_ntflux[-1])
 
-        fig = generate_flux_graph(
+        fig, fig_leg = generate_flux_graph(
             G=G,
             K=K,
             probs=probs,
@@ -778,6 +815,7 @@ def plot_flux_graphs(df, fig_key):
             node_pos=node_pos,
         )
         data_dict["figures"].append(fig)
+        data_dict["figures"].append(fig_leg)
         plt.close()
 
     return data_dict
