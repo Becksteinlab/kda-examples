@@ -231,9 +231,10 @@ def rect_label(color):
 def plot_fig_7B(df, colors):
 
     main_fig_width = 3.25 # inches
-    legend_width = 1 # inches
     main_fig_height = 4.25 # inches
-    fig_leg = plt.figure(figsize=(legend_width, main_fig_height), tight_layout=True)
+    legend_width = 0.85 # inches
+    legend_height = 1.1 # inches
+    fig_leg = plt.figure(figsize=(legend_width, legend_height), tight_layout=True)
     ax_leg = fig_leg.add_subplot(111)
     fig = plt.figure(figsize=(main_fig_width, main_fig_height), tight_layout=True)
     axH = fig.add_subplot(311)
@@ -252,24 +253,17 @@ def plot_fig_7B(df, colors):
 
     linewidth = 0.6
 
-    axH.axvline(
-        x=1,
-        ymin=0,
-        ymax=1,
-        ls="--",
-        lw=0.8,
-        color="black",
-        label=r"$R_\mathrm{off}$ = 1",
-    )
-    axD.axvline(
-        x=1,
-        ymin=0,
-        ymax=1,
-        ls="--",
-        lw=0.8,
-        color="black",
-        label=r"$R_\mathrm{off}$ = 1",
-    )
+    for _ax in (axH, axD):
+        _ax.axvline(
+            x=1,
+            ymin=0,
+            ymax=1,
+            ls="--",
+            lw=0.8,
+            color="black",
+            # label=r"$R_\mathrm{off}$ = 1",
+        )
+    axD.set_ylim(-0.11, 0.11)
 
     rect_handles = [rect_label(color="black")]
     for i, val in enumerate(unique_k_AA):
@@ -298,17 +292,24 @@ def plot_fig_7B(df, colors):
     axD.set_ylabel(r"Drug Flux (s$^{-1}$)")
 
     _, labels = axH.get_legend_handles_labels()
+    new_labels = []
+    for _label in labels:
+        if _label == "100":
+            _label = r"$\bf{100}$"
+        new_labels.append(_label)
     ax_leg.axis("off")
     ax_leg.legend(
         rect_handles[::-1],
-        labels[::-1],
+        new_labels[::-1],
         bbox_to_anchor=(0.5, 0.5),
         loc="center",
         title=r"$k_\mathrm{AA}$ (s$^{-1}$)",
         handlelength=1,
         handleheight=1,
     )
-    fig_leg.savefig("plots/figures/fig_7B_legend.png", dpi=300)
+    for _ext in ("png", "pdf", "svg"):
+        fig_leg.savefig(f"plots/figures/fig_7B_legend.{_ext}", dpi=300)
+
 
     max_power = np.max(np.log10(R_off_data))
     xticks = np.logspace(-max_power, max_power, 9)

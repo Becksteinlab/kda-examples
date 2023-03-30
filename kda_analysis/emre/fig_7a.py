@@ -177,7 +177,7 @@ def sub_dict_7a_symbols():
         k42: H_on * H_out,
         k24: H_off,
         k68: H_on * H_in,
-        k86: D_off,
+        k86: H_off,
         k34: D_on * D_out,
         k43: D_off,
         k56: D_on * D_in,
@@ -246,7 +246,7 @@ def sub_dict_7a_values():
         k42: H_on * H_out,
         k24: H_off,
         k68: H_on * H_in,
-        k86: D_off,
+        k86: H_off,
         k34: D_on * c_D,
         k43: D_off,
         k56: D_on * c_D,
@@ -270,7 +270,10 @@ def sub_dict_7a_values():
 def plot_fig_7A(df):
     main_fig_width = 3.25 # inches
     main_fig_height = 4.25 # inches
-    legend_width = 0.8125 # inches
+    legend_width = 0.85 # inches
+    legend_height = 1.0 # inches
+    fig_leg = plt.figure(figsize=(legend_width, legend_height), tight_layout=True)
+    ax_leg = fig_leg.add_subplot(111)
     fig = plt.figure(figsize=(main_fig_width, main_fig_height), tight_layout=True)
     ax = fig.add_subplot(211)
 
@@ -302,4 +305,4 @@ def plot_fig_7A(df):
         ls="--",
         color="black",
     )
-    return fig, [ax]
+    return fig, [ax, ax_leg]

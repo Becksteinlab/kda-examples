@@ -65,9 +65,10 @@ def main(fig_list, check_thermo_con):
         )
 
         fig = fig_utils.plot_data(df=plot_df, fig_key=fig_key)
-        save_path = f"plots/figures/fig_{fig_key}.png"
-        print(f"--> Saving Fig. {fig_key} at location: {save_path}")
-        plt.savefig(save_path, dpi=300)
+        save_path = f"plots/figures/fig_{fig_key}"
+        print(f"--> Saving Fig. {fig_key} at location: {save_path}...")
+        for _ext in ("png", "pdf", "svg"):
+            fig.savefig(f"{save_path}.{_ext}", dpi=300)
         plt.close()
 
         supported_figs = ["7A", "7B"]
@@ -77,8 +78,9 @@ def main(fig_list, check_thermo_con):
                 zip(data_dict["figures"], data_dict["filenames"])
             ):
                 save_path = f"plots/flux_graphs/{filename}"
-                print(f"--> Saving Fig. {fig_key} at location: {save_path}")
-                flux_graph.savefig(save_path, dpi=300)
+                print(f"--> Saving Fig. {fig_key} at location: {save_path}...")
+                for _ext in ("png", "pdf", "svg"):
+                    flux_graph.savefig(f"{save_path}.{_ext}", dpi=300)
                 plt.close()
 
 

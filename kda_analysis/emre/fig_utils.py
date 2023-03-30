@@ -111,6 +111,8 @@ def get_rate_names(fig_key):
 
 
 def get_H_D_cos_dicts(G, K):
+    # H: 1 -> 7, 2 -> 8
+    # D: 4 -> 6, 2 -> 8
     H_edges = [(0, 6, 0), (1, 7, 0)]
     D_edges = [(3, 5, 0), (1, 7, 0)]
 
@@ -292,7 +294,19 @@ def plot_data(df, fig_key):
     plt.setp(axs[-1].get_xticklabels(), visible=False)
 
     if fig_key == "7A":
-        fig.legend(loc="center left", bbox_to_anchor=(1.01, 0.53))
+        ax_leg = axs[1]
+        ax_leg.axis("off")
+        handles = []
+        labels = []
+        for _ax in fig.axes:
+            _handles, _labels = _ax.get_legend_handles_labels()
+            handles.extend(_handles)
+            labels.extend(_labels)
+        ax_leg.legend(handles, labels, loc="center", bbox_to_anchor=(0.5, 0.5))
+        fig_leg = ax_leg.get_figure()
+        for _ext in ("png", "pdf", "svg"):
+            fig_leg.savefig(f"plots/figures/fig_7A_legend.{_ext}", dpi=300)
+
     elif fig_key == "9":
         fig.legend(loc="upper right", bbox_to_anchor=(0.97, 0.53))
 
@@ -332,7 +346,7 @@ def plot_stoichiometric_ratio(df, fig_key, fig, axs):
             ymax=1,
             ls="--",
             color="black",
-            label=r"$R_\mathrm{AA}$ = 1",
+            # label=r"$R_\mathrm{AA}$ = 1",
         )
         legend_title = None
 
@@ -360,7 +374,7 @@ def plot_stoichiometric_ratio(df, fig_key, fig, axs):
             ls="--",
             lw=0.8,
             color="black",
-            label=r"$R_\mathrm{off}$ = 1",
+            # label=r"$R_\mathrm{off}$ = 1",
         )
         legend_title = r"$k_\mathrm{AA}$"
 
@@ -514,7 +528,7 @@ def generate_flux_graph(
         J_rev = probs[j] * K[j, i]
         net_trans_flux = J_for - J_rev
 
-        if np.abs(net_trans_flux) > 0.1:
+        if np.abs(net_trans_flux) > 0.02:
             val = np.abs(net_trans_flux)
             label = f"{val:.2f}"
             ntflux_label_dict[(i, j)] = label
@@ -530,13 +544,13 @@ def generate_flux_graph(
     scale_factor = 1.25
     diagram_side = 1.625 * scale_factor # inches
     legend_height = 0.875 * scale_factor # inches
-    canvas_height = diagram_side + legend_height
+    legend_width = 1.25 * scale_factor # inches
 
     fig = plt.figure(figsize=(diagram_side, diagram_side))
     ax = fig.add_subplot(111)
     ax.axis("off")
 
-    fig_leg = plt.figure(figsize=(diagram_side, legend_height))
+    fig_leg = plt.figure(figsize=(legend_width, legend_height))
     ax_leg = fig_leg.add_subplot(111)
     ax_leg.axis("off")
 
@@ -657,7 +671,7 @@ def generate_flux_graph(
 
     ax_leg.legend(
         loc="center",
-        bbox_to_anchor=(0.5, 0.5),
+        bbox_to_anchor=(0.49, 0.5),
         handles=legend_elements,
         title=title,
     )
@@ -677,8 +691,13 @@ def plot_flux_graphs(df, fig_key):
         # just select one of the middle values
         selected_k_AA = 100
         new_df = df[df["k17"] == selected_k_AA]
-        n_datasets = new_df.shape[0]
-        subset_idx = np.linspace(0, n_datasets - 1, 5, dtype=np.int32)
+        R_off = new_df["k2"] / new_df["k6"]
+        R_off = R_off.reset_index(drop=True)
+        # values of interest
+        interest_vals = [1e-10, 1, 100]
+        # find the indices of the dataframe where R_off values
+        # are equal to the values of interest
+        subset_idx = [R_off.index[R_off == val].tolist()[0] for val in interest_vals]
         df_subset = new_df.iloc[subset_idx]
     else:
         raise NotImplementedError(f"Not implemented for Fig. {fig_key}")
@@ -744,16 +763,16 @@ def plot_flux_graphs(df, fig_key):
             if R_AA == 1:
                 is_max_flux = True
             title_str = r"$R_\mathrm{AA} = $" + fmtscientific(R_AA)
-            filename = f"fig_{fig_key}_flux_diagram_RAA_{R_AA:.0E}.png"
-            filename_leg = f"fig_{fig_key}_flux_diagram_RAA_{R_AA:.0E}_legend.png"
+            filename = f"fig_{fig_key}_flux_diagram_RAA_{R_AA:.0E}"
+            filename_leg = f"fig_{fig_key}_flux_diagram_RAA_{R_AA:.0E}_legend"
         elif fig_key == "7B":
             R_off = row["k2"] / row["k6"]
             if R_off == 1:
                 is_max_flux = True
             k_AA = row["k17"]
             title_str = r"$R_\mathrm{off} = $" + fmtscientific(R_off)
-            filename = f"fig_{fig_key}_flux_diagram_kAA_{k_AA:.0E}_Roff_{R_off:.0E}.png"
-            filename_leg = f"fig_{fig_key}_flux_diagram_kAA_{k_AA:.0E}_Roff_{R_off:.0E}_legend.png"
+            filename = f"fig_{fig_key}_flux_diagram_kAA_{k_AA:.0E}_Roff_{R_off:.0E}"
+            filename_leg = f"fig_{fig_key}_flux_diagram_kAA_{k_AA:.0E}_Roff_{R_off:.0E}_legend"
 
         data_dict["max_flux_case"].append(is_max_flux)
         data_dict["filenames"].append(filename)
