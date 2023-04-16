@@ -39,8 +39,103 @@ def get_node_positions():
     return node_pos
 
 
-def is_odd(x):
-    return x % 2 != 0
+def get_linestyle(x):
+    if x % 2 != 0:
+        return "-"
+    else:
+        return "--"
+
+
+def get_linewidth(x):
+    if x % 2 != 0:
+        return 1.25
+    else:
+        return 2.5
+
+
+def plot_net_cycle_fluxes(R, fluxes, flux_tot, cycles, norm=True):
+
+    fig = plt.figure(figsize=(5, 4), tight_layout=True)
+    ax = fig.add_subplot(111)
+
+    # if any of the net cycle flux values across the range 
+    # are above this threshold they will be plotted
+    threshold = 1e-3
+    color_list = get_colors()
+    color_idx = 0
+
+    if norm:
+        for i, (cycle, flux) in enumerate(zip(cycles, fluxes)):
+            if np.any(flux > threshold):
+                normalized_flux = 100 * np.abs(flux) / np.abs(flux_tot)
+                ax.semilogx(
+                    R,
+                    normalized_flux,
+                    color=color_list[color_idx],
+                    ls=get_linestyle(color_idx),
+                    lw=get_linewidth(color_idx),
+                    label=f"Cycle {i+1}",
+                )
+                color_idx +=1
+            ax.set_ylim(0, 100)
+            ax.set_title("EmrE Net Cycle Flux % Contribution")
+            ax.set_ylabel("Contribution (%)")
+
+    else:
+        ax.semilogx(x, flux_tot, "-", lw=2, color="black", label="Total")
+        
+        for i, (cycle, flux) in enumerate(zip(cycles, fluxes)):
+            if np.any(flux > threshold):
+                ax.semilogx(
+                    R, 
+                    flux,
+                    color=color_list[color_idx], 
+                    ls=get_linestyle(color_idx), 
+                    lw=get_linewidth(color_idx), 
+                    label=f"Cycle {i+1}",
+                )
+                color_idx +=1
+        ax.set_title("EmrE Net Cycle Fluxes")
+        ax.set_ylabel(r"Flux ($s^{-1}$)")
+
+    ax.axvline(x=1e0, ymin=0, ymax=1, ls="--", label=r"$R_{\mathrm{AA}}=1$", color="black")
+    ax.set_xlabel(r"$R_{\mathrm{AA}}$")
+    plt.legend(bbox_to_anchor=(1, 1), loc="upper left", ncol=1)
+    ax.grid(True)
+    plt.close()
+    return fig
+
+
+def plot_transition_flux(RAA, edges, fluxes):
+    colors = get_colors()
+    fig = plt.figure(figsize=(8, 5), tight_layout=True)
+    ax = fig.add_subplot(111)
+
+    threshold = 1e-3
+
+    color_idx = 0
+    for edge, flux, col in zip(edges, fluxes, colors):
+        if np.any(flux > threshold):
+            new_edge = [edge[0], edge[1]]
+            edge_tuple = tuple(np.array(new_edge) + 1)
+            ax.semilogx(
+                RAA, 
+                flux, 
+                ls=style, 
+                lw=2, 
+                color=col, 
+                label=f"J_{edge_tuple}",
+            )
+            color_idx += 1
+    ax.set_title("EmrE Net Transition Fluxes")
+    ax.set_ylabel(r"Flux ($s^{-1}$)")
+
+    ax.axhline(y=0, xmin=0, xmax=1, ls="-", color="black")
+    ax.axvline(x=1e0, ymin=0, ymax=1, ls="-", color="black")
+    ax.set_xlabel(r"$R_{\mathrm{AA}}$")
+    plt.legend(bbox_to_anchor=(1, 1), loc="upper left", ncol=1)
+    ax.grid(True)
+
 
 
 def plot_gradients(RAA, Tr, Hr):
@@ -68,99 +163,6 @@ def plot_gradients(RAA, Tr, Hr):
     # ax.axhline(y=1e0, xmin=0, xmax=1, ls='-', color='black')
     # ax.axvline(x=1e0, ymin=0, ymax=1, ls='-', color='black')
     plt.legend(loc="best")
-    ax.grid(True)
-
-
-def plot_cycle_flux(RAA, cycles, fluxes, flux_tot, species, raw=False):
-    colors = get_colors()
-    fig = plt.figure(figsize=(13, 7), tight_layout=True)
-    ax = fig.add_subplot(111)
-
-    if species == "H":
-        label1 = "Proton"
-        label2 = "J_{H}"
-        colour = "#A02020"
-    elif species == "D":
-        label1 = "Drug"
-        label2 = "J_{D}"
-        colour = "#6BE35D"
-    if raw == False:
-        i = 1
-        for cycle, cf, col in zip(cycles, fluxes, colors):
-            new_cycle = list(np.array(cycle) + 1)
-            if is_odd(i) == True:
-                style = "-"
-            else:
-                style = "--"
-            ax.semilogx(
-                RAA,
-                100 * np.abs(cf) / np.abs(flux_tot),
-                ls=style,
-                lw=2,
-                color=col,
-                label="{}".format(new_cycle),
-            )
-            i += 1
-        ax.set_ylim(0, 100)
-        ax.set_title("EmrE {} Flux Contributions by Cycle".format(label1))
-        ax.set_ylabel(r"Contribution (%)")
-
-    elif raw == True:
-        ax.semilogx(
-            RAA, flux_tot, "-", lw=2, color=colour, label=r"${}$".format(label2)
-        )
-        i = 1
-        for cycle, cf, col in zip(cycles, fluxes, colors):
-            new_cycle = list(np.array(cycle) + 1)
-            if is_odd(i) == True:
-                style = "-"
-            else:
-                style = "--"
-            ax.semilogx(
-                RAA, cf, ls=style, lw=2, color=col, label="{}".format(new_cycle)
-            )
-            i += 1
-        ax.set_title("EmrE {} Flux by Cycle".format(label1))
-        ax.set_ylabel(r"Flux ($s^{-1}$)")
-
-    ax.axhline(y=0, xmin=0, xmax=1, ls="-", color="black")
-    ax.axvline(x=1e0, ymin=0, ymax=1, ls="-", color="black")
-    ax.set_xlabel(r"$R_{AA}$")
-    plt.legend(bbox_to_anchor=(1, 1), loc="upper left", ncol=1)
-    ax.grid(True)
-
-
-def plot_transition_flux(RAA, edges, fluxes, species):
-    colors = get_colors()
-    fig = plt.figure(figsize=(12, 7), tight_layout=True)
-    ax = fig.add_subplot(111)
-
-    if species == "H":
-        label1 = "Proton"
-        label2 = "J_{H}"
-        colour = "#A02020"
-    elif species == "D":
-        label1 = "Drug"
-        label2 = "J_{D}"
-        colour = "#6BE35D"
-
-    i = 1
-    for edge, tf, col in zip(edges, fluxes, colors):
-        new_edge = [edge[0], edge[1]]
-        edge_tuple = tuple(np.array(new_edge) + 1)
-        if is_odd(i) == True:
-            style = "-"
-        else:
-            style = "--"
-        ax.semilogx(RAA, tf, ls=style, lw=2, color=col, label="J_{}".format(edge_tuple))
-        i += 1
-    ax.set_title("EmrE {} Flux by Transition".format(label1))
-    ax.set_ylabel(r"Flux ($s^{-1}$)")
-
-    ax.axhline(y=0, xmin=0, xmax=1, ls="-", color="black")
-    ax.axvline(x=1e0, ymin=0, ymax=1, ls="-", color="black")
-    ax.set_xlabel(r"$R_{AA}$")
-    plt.legend(bbox_to_anchor=(1, 1), loc="upper left", ncol=1)
     ax.grid(True)
 
 
