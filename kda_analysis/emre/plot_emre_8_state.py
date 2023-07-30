@@ -103,7 +103,7 @@ if __name__ == "__main__":
     test_path = os.path.join(dir_path, "fig_7A_cycle_1_net_cycle_flux.txt")
     if not os.path.isfile(test_path):
         sub_dict = fig_7a.sub_dict_7a_values()
-        generate_net_cycle_flux_sympy_funcs(G, sub_dict=sub_dict, dir_path=dir_path)
+        op_flux.generate_net_cycle_flux_sympy_funcs(G, sub_dict=sub_dict, dir_path=dir_path)
 
     df = fig_7a.get_7a_dataframe()
     k_AA_anti_arr = df["k17"].values
@@ -125,10 +125,10 @@ if __name__ == "__main__":
 
     # plot the individual net cycle fluxes
     cycle_flux_fig = plotting_emre.plot_net_cycle_fluxes(
-        x=R_AA_arr, 
-        fluxes=flux_arrays, 
-        flux_tot=flux_total, 
-        cycles=all_cycles, 
+        R=R_AA_arr,
+        fluxes=flux_arrays,
+        flux_tot=flux_total,
+        cycles=all_cycles,
         norm=True,
     )
     for ext in ("png", "svg", "pdf"):

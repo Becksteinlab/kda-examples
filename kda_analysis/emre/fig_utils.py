@@ -694,7 +694,7 @@ def plot_flux_graphs(df, fig_key):
         R_off = new_df["k2"] / new_df["k6"]
         R_off = R_off.reset_index(drop=True)
         # values of interest
-        interest_vals = [1e-10, 1, 100]
+        interest_vals = [1e-10, 1, 100, 1e10]
         # find the indices of the dataframe where R_off values
         # are equal to the values of interest
         subset_idx = [R_off.index[R_off == val].tolist()[0] for val in interest_vals]

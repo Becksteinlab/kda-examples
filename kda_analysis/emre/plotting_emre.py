@@ -58,45 +58,38 @@ def plot_net_cycle_fluxes(R, fluxes, flux_tot, cycles, norm=True):
     fig = plt.figure(figsize=(5, 4), tight_layout=True)
     ax = fig.add_subplot(111)
 
-    # if any of the net cycle flux values across the range 
+    # if any of the net cycle flux values across the range
     # are above this threshold they will be plotted
     threshold = 1e-3
     color_list = get_colors()
     color_idx = 0
 
     if norm:
-        for i, (cycle, flux) in enumerate(zip(cycles, fluxes)):
-            if np.any(flux > threshold):
-                normalized_flux = 100 * np.abs(flux) / np.abs(flux_tot)
-                ax.semilogx(
-                    R,
-                    normalized_flux,
-                    color=color_list[color_idx],
-                    ls=get_linestyle(color_idx),
-                    lw=get_linewidth(color_idx),
-                    label=f"Cycle {i+1}",
-                )
-                color_idx +=1
-            ax.set_ylim(0, 100)
-            ax.set_title("EmrE Net Cycle Flux % Contribution")
-            ax.set_ylabel("Contribution (%)")
-
+        ax.set_ylim(0, 100)
+        ax.set_title("EmrE Net Cycle Flux % Contribution")
+        ax.set_ylabel("Contribution (%)")
     else:
-        ax.semilogx(x, flux_tot, "-", lw=2, color="black", label="Total")
-        
-        for i, (cycle, flux) in enumerate(zip(cycles, fluxes)):
-            if np.any(flux > threshold):
-                ax.semilogx(
-                    R, 
-                    flux,
-                    color=color_list[color_idx], 
-                    ls=get_linestyle(color_idx), 
-                    lw=get_linewidth(color_idx), 
-                    label=f"Cycle {i+1}",
-                )
-                color_idx +=1
+        ax.semilogx(R, flux_tot, "-", lw=2, color="black", label="Total")
         ax.set_title("EmrE Net Cycle Fluxes")
         ax.set_ylabel(r"Flux ($s^{-1}$)")
+
+    def calc_flux(flux, flux_tot, normalize):
+        if norm:
+            return 100 * np.abs(flux / flux_tot)
+        else:
+            return flux
+
+    for i, (cycle, flux) in enumerate(zip(cycles, fluxes)):
+        if np.any(np.abs(flux) > threshold):
+            ax.semilogx(
+                R,
+                calc_flux(flux=flux, flux_tot=flux_tot, normalize=norm),
+                color=color_list[color_idx],
+                ls=get_linestyle(color_idx),
+                lw=get_linewidth(color_idx),
+                label=f"Cycle {i+1}",
+            )
+            color_idx +=1
 
     ax.axvline(x=1e0, ymin=0, ymax=1, ls="--", label=r"$R_{\mathrm{AA}}=1$", color="black")
     ax.set_xlabel(r"$R_{\mathrm{AA}}$")
@@ -119,11 +112,11 @@ def plot_transition_flux(RAA, edges, fluxes):
             new_edge = [edge[0], edge[1]]
             edge_tuple = tuple(np.array(new_edge) + 1)
             ax.semilogx(
-                RAA, 
-                flux, 
-                ls=style, 
-                lw=2, 
-                color=col, 
+                RAA,
+                flux,
+                ls=style,
+                lw=2,
+                color=col,
                 label=f"J_{edge_tuple}",
             )
             color_idx += 1
