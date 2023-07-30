@@ -1,3 +1,4 @@
+import os
 import sys
 
 # have to raise the recursion limit or SymPy raises a RecursionError when
@@ -5,6 +6,7 @@ import sys
 sys.setrecursionlimit(5000)
 import time
 
+import dill
 import numpy as np
 from sympy import simplify, lambdify
 from sympy.parsing.sympy_parser import parse_expr
@@ -402,6 +404,73 @@ def get_single_cycle_flux_numerators(
 
     return lambda_funcs
 
+
+def get_cycle_order(cycle_idx):
+    # manually set the order to CCW
+    if cycle_idx < 14:
+        order = [6, 0]
+    elif (cycle_idx >= 14) and (cycle_idx < 21):
+        order = [0, 2]
+    elif (cycle_idx >= 21) and (cycle_idx < 25):
+        order = [7, 1]
+    elif (cycle_idx >= 25) and (cycle_idx < 27):
+        order = [2, 4]
+    elif cycle_idx == 27:
+        order = [4, 6]
+    else:
+        raise ValueError(f"Too many cycles detected. Expected 28, detected {len(all_cycles)}.")
+    return order
+
+
+def generate_net_cycle_flux_sympy_funcs(G, sub_dict, dir_path):
+    all_cycles = graph_utils.find_all_unique_cycles(G)
+    dir_edges = diagrams.generate_directional_diagrams(G, return_edges=True)
+    sigma_str = calculations.calc_sigma(G, dir_edges, key="name", output_strings=True)
+
+    data_dict = {}
+    for i, cycle in enumerate(all_cycles):
+
+        filepath = os.path.join(dir_path, f"fig_7A_cycle_{i+1}_net_cycle_flux.txt")
+
+        if not os.path.isfile(filepath):
+            print(
+                f"No SymPy function found at location {filepath} \n"
+                f"Generating new sympy function..."
+            )
+            print("=" * 20)
+            print(f"Cycle {i+1}: {cycle}")
+            order = get_cycle_order(cycle_idx=i)
+            print(f"Cycle {i+1} order: {order}")
+            sys.stdout.flush()
+            flux_diags = diagrams.generate_flux_diagrams(G, cycle=cycle)
+            pi_diff_str = calculations.calc_pi_difference(G, cycle, order=order, key="name", output_strings=True)
+            sigma_K_str = calculations.calc_sigma_K(G, cycle, flux_diags, key="name", output_strings=True)
+
+            if sigma_K_str == 1:
+                numerator = pi_diff_str
+            else:
+                numerator = str(parse_expr(pi_diff_str) * parse_expr(sigma_K_str))
+
+            sympy_func = parse_expr(numerator) / parse_expr(sigma_str)
+            sympy_func = simplify(sympy_func.subs(sub_dict))
+            dill.dump(sympy_func, open(filepath, "wb"))
+
+
+def get_net_cycle_flux_cycles_and_funcs(G, rate_names, dir_path):
+    all_cycles = graph_utils.find_all_unique_cycles(G)
+
+    data_dict = {}
+    for i, cycle in enumerate(all_cycles):
+        filepath = os.path.join(dir_path, f"fig_7A_cycle_{i+1}_net_cycle_flux.txt")
+        sympy_func = dill.load(open(filepath, "rb"))
+        lambdify_func = lambdify(rate_names, sympy_func, "numpy")
+
+        cycle_key = f"Cycle {i+1}"
+        data_dict[cycle_key] = {}
+        data_dict[cycle_key]["cycle"] = cycle
+        data_dict[cycle_key]["func"] = lambdify_func
+
+    return data_dict
 
 # def get_operational_thermo_force(G, cos_dict, sub_dict):
 #     """

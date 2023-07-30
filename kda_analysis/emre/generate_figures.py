@@ -63,6 +63,9 @@ def main(fig_list, check_thermo_con):
         plot_df = fig_utils.get_plot_data(
             df=df_fig, fH=H_op_flux_f, fD=D_op_flux_f, fig_key=fig_key
         )
+        plot_data_path = f"./data/fig_{fig_key}_data.csv"
+        plot_df.to_csv(plot_data_path, index=False)
+
 
         fig = fig_utils.plot_data(df=plot_df, fig_key=fig_key)
         save_path = f"plots/figures/fig_{fig_key}"
