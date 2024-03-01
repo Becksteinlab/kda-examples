@@ -90,3 +90,14 @@ J_Na_trans = (p6.subs(model) * model[k61]
 # created using cycles and transitions
 print((J_H_cycle - J_H_trans).simplify() == 0)
 print((J_Na_cycle - J_Na_trans).simplify() == 0)
+
+# =================
+# === Output ======
+# =================
+# (kda-env)
+# nikol@Lorentz MINGW64 ~/OneDrive/projects/kinetic_diagram_analysis/kda-examples/kda_analysis/test_models (add_op_flux_comparison_scripts)
+# $ python 6wl_operational_flux_expression_comparison.py
+# Cycle [0, 1, 2, 3, 4, 5] contains all nodes in G. No flux diagrams generated.
+# No flux diagrams detected for cycle [0, 1, 2, 3, 4, 5]. Sigma K value is 1.
+# True
+# True

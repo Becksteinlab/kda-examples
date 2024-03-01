@@ -138,12 +138,11 @@ J_D_trans = (J_21 + J_43).simplify()
 print((J_H_cycle - J_H_trans).simplify() == 0)
 print((J_D_cycle - J_D_trans).simplify() == 0)
 
-# ==========================
-# === Output ===============
-# ==========================
-
-# (kda-env-py39)
-# nikol@Gauss MINGW64 ~/OneDrive/nawtrey-notes/notes/kda-tasks (main)
+# =================
+# === Output ======
+# =================
+# (kda-env)
+# nikol@Lorentz MINGW64 ~/OneDrive/projects/kinetic_diagram_analysis/kda-examples/kda_analysis/emre (add_op_flux_comparison_scripts)
 # $ python emre_operational_flux_expression_comparison.py
 # Cycle [0, 1, 3, 2, 4, 5, 7, 6] contains all nodes in G. No flux diagrams generated.
 # No flux diagrams detected for cycle [0, 1, 3, 2, 4, 5, 7, 6]. Sigma K value is 1.
@@ -153,7 +152,5 @@ print((J_D_cycle - J_D_trans).simplify() == 0)
 # No flux diagrams detected for cycle [0, 1, 3, 5, 7, 6, 4, 2]. Sigma K value is 1.
 # Cycle [0, 1, 7, 6, 4, 5, 3, 2] contains all nodes in G. No flux diagrams generated.
 # No flux diagrams detected for cycle [0, 1, 7, 6, 4, 5, 3, 2]. Sigma K value is 1.
-# 0
-# 0
 # True
 # True
