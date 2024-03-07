@@ -40,19 +40,20 @@ if __name__ == "__main__":
     #######################
     ##### Plot Cycles #####
     #######################
-    plotting_kda.draw_cycles(
-        G,
-        all_cycles,
-        pos=node_pos,
-        panel=True,
-        panel_scale=2,
-        font_size=13,
-        rows=4,
-        cbt=True,
-        curved_arrows=True,
-        path=save_path,
-        label="all_cycles",
-    )
+    for file_ext in (".png", ".svg", ".pdf"):
+        fig = plotting_kda.draw_cycles(
+            G,
+            all_cycles,
+            pos=node_pos,
+            panel=True,
+            panel_scale=2,
+            font_size=13,
+            rows=4,
+            cbt=True,
+            curved_arrows=True,
+        )
+        fname = f"all_cycles{file_ext}"
+        fig.savefig(os.path.join(save_path, fname), dpi=300)
 
     plotting_kda.draw_cycles(
         G,
