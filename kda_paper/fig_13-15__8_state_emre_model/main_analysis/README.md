@@ -22,10 +22,10 @@ All generated figures can be found in either `plots/figures` or `plots/flux_grap
 Here is a list of the key figures from the paper:
 
 - `emre_8_state_model.png`: kinetic diagram for the 8-state model of EmrE
-- `all_cycles.*`: All valid cycles for the 8-state model of EmrE (Figure 13)
-- `fig_7A.*`: Operational fluxes of EmrE for alternating access rate biasing (Figure 14a)
-- `fig_7B.*`: Operational fluxes of EmrE for substrate off-rate biasing (Figure 15a)
-- `fig_7A_flux_diagram_RAA_1E-08.*`, `fig_7A_flux_diagram_RAA_1E+00.*`, `fig_7A_flux_diagram_RAA_1E+08.*`: kinetic diagrams with transition-flux-weighted edges for alternating access rate biasing (Figures 14b-14d). The legends for each are included separately (i.e. `fig_7A_flux_diagram_RAA_1E+00_legend.*`).
-- `fig_7B_flux_diagram_kAA_1E+02_Roff_1E-10.*`, `fig_7B_flux_diagram_kAA_1E+02_Roff_1E+00.*`, `fig_7B_flux_diagram_kAA_1E+02_Roff_1E+02.*`: kinetic diagrams with transition-flux-weighted edges for substrate off-rate biasing (Figures 15b-15d). The legends for each are included separately.
+- `all_cycles.*`: All valid cycles for the 8-state model of EmrE (**Figure 13**)
+- `fig_7A.*`: Operational fluxes of EmrE for alternating access rate biasing (**Figure 14a**)
+- `fig_7B.*`: Operational fluxes of EmrE for substrate off-rate biasing (**Figure 15a**)
+- `fig_7A_flux_diagram_RAA_1E-08.*`, `fig_7A_flux_diagram_RAA_1E+00.*`, `fig_7A_flux_diagram_RAA_1E+08.*`: kinetic diagrams with transition-flux-weighted edges for alternating access rate biasing (**Figures 14b-14d**). The legends for each are included separately (i.e. `fig_7A_flux_diagram_RAA_1E+00_legend.*`).
+- `fig_7B_flux_diagram_kAA_1E+02_Roff_1E-10.*`, `fig_7B_flux_diagram_kAA_1E+02_Roff_1E+00.*`, `fig_7B_flux_diagram_kAA_1E+02_Roff_1E+02.*`: kinetic diagrams with transition-flux-weighted edges for substrate off-rate biasing (**Figures 15b-15d**). The legends for each are included separately.
 
 **NOTE:** `generate_figures.py` uses previously generated data (`main_analysis/data/all_figure_data.csv`) and sympy expressions (located in `main_analysis/fig_functions`) to speed up code execution. `all_figure_data.csv` can be re-generated using `generate_fig_data.py`. To generate new sympy expressions at run time, simply delete all files in the `main_analysis/fig_functions` directory and re-run `generate_figures.py`. 
