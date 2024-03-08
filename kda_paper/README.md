@@ -1,12 +1,15 @@
 # Kinetic Diagram Analysis Paper Figures
 
-Code and data used in the [Kinetic Diagram Analysis](https://github.com/Becksteinlab/kda) (KDA) paper. 
+Code and data used in the [Kinetic Diagram Analysis](https://github.com/Becksteinlab/kda) paper. 
 
 **Warning:** KDA is in flux and not API stable. The latest known working KDA commit hash: `b63d5f2`
 
+
 ## Generating Figures and Data
 
-The code (and data) are organized by figure or section. With KDA installed (see [KDA Installation](https://github.com/becksteinlab/kda?tab=readme-ov-file#installation)) the instructions to execute the code and generate the figures is included below.
+The code (and data) are organized by figure or section. With KDA installed (see [KDA Installation](https://github.com/becksteinlab/kda?tab=readme-ov-file#installation)) the instructions to execute the code and generate the figures in each directory is included below.
+
+
 
 ### Figure 1: 4-state Example Model
 
@@ -16,7 +19,9 @@ To generate the figures simply run the following from the `fig_1-4__4_state_exam
 $ python make_4wl_figures.py
 ```
 
-This will create and store all figures for the 4-state model in the current working directory. 3 files will be generated for each figure, a `.png`, `.pdf`, and `.svg`, for convenience.
+This will create and store all figures for the 4-state model in the current working directory. For each figure 3 files will be generated (`.png`, `.pdf`, and `.svg`).
+
+
 
 ### Figure 10: KDA Validation & Performance
 
@@ -30,6 +35,8 @@ $ python make_timing_plot.py ./data.csv
 ```
 
 This will create and store both figures used in the paper (`rmsd_vs_states.pdf` and `time_vs_dirpars.pdf`) in the current working directory.
+
+
 
 ### Figure 11: 6-state Antiporter Model
 
@@ -50,11 +57,16 @@ This will create the following files:
 
 An additional file (`tflux_table_data.csv`) is included which was used to compare the raw data for the operational flux calculation method comparison in the paper (Section 3.3: Operational Fluxes in Terms of Net Transition Fluxes).
 
+
+
 ### Figures 13-15: Free Exchange Model of EmrE
+
+The modules here provide the ability to generate many different figures based on the 8-state model of EmrE, most of which are not used in the paper. 
+
 
 #### EmrE Main Figures
 
-The modules here provide the ability to generate many different figures based on the 8-state model of EmrE, most of which are not used in the paper. To generate _all_ figures, run the following from the `fig_13-15__8_state_emre_model/main_analysis` directory:
+To generate _all_ figures, run the following from the `fig_13-15__8_state_emre_model/main_analysis` directory:
 
 ```bash
 $ mkdir plots
@@ -64,7 +76,9 @@ $ python plot_emre_8_state.py
 $ python generate_figures.py
 ```
 
-All generated figures can be found in either `main_analysis/plots/figures` or `main_analysis/plots/flux_graphs`. The raw data for each figure (7A, 7B, etc.) can be found in `main_analysis/data`. Here is a list of the key figures from the paper:
+All generated figures can be found in either `main_analysis/plots/figures` or `main_analysis/plots/flux_graphs`. The raw data for each figure (7A, 7B, etc.) can be found in `main_analysis/data`. 
+
+Here is a list of the key figures from the paper:
 
 - `emre_8_state_model.png`: kinetic diagram for the 8-state model of EmrE
 - `all_cycles.*`: All valid cycles for the 8-state model of EmrE (Figure 13)
@@ -73,7 +87,8 @@ All generated figures can be found in either `main_analysis/plots/figures` or `m
 - `fig_7A_flux_diagram_RAA_1E-08.*`, `fig_7A_flux_diagram_RAA_1E+00.*`, `fig_7A_flux_diagram_RAA_1E+08.*`: kinetic diagrams with transition-flux-weighted edges for alternating access rate biasing (Figures 14b-14d). The legends for each are included separately (i.e. `fig_7A_flux_diagram_RAA_1E+00_legend.*`).
 - `fig_7B_flux_diagram_kAA_1E+02_Roff_1E-10.*`, `fig_7B_flux_diagram_kAA_1E+02_Roff_1E+00.*`, `fig_7B_flux_diagram_kAA_1E+02_Roff_1E+02.*`: kinetic diagrams with transition-flux-weighted edges for substrate off-rate biasing (Figures 15b-15d). The legends for each are included separately.
 
-NOTE: `generate_figures.py` uses previously generated data (`main_analysis/data/all_figure_data.csv`) and sympy expressions (located in `main_analysis/fig_functions`) to speed up code execution. `all_figure_data.csv` can be re-generated using `generate_fig_data.py`. To generate new sympy expressions at run time, simply delete all files in the `main_analysis/fig_functions` directory and re-run `generate_figures.py`. 
+**NOTE:** `generate_figures.py` uses previously generated data (`main_analysis/data/all_figure_data.csv`) and sympy expressions (located in `main_analysis/fig_functions`) to speed up code execution. `all_figure_data.csv` can be re-generated using `generate_fig_data.py`. To generate new sympy expressions at run time, simply delete all files in the `main_analysis/fig_functions` directory and re-run `generate_figures.py`. 
+
 
 #### Net Transition Flux Analysis
 
@@ -88,13 +103,19 @@ This will generate the following files:
 - `opflux_from_tflux_7A.csv`: raw operational flux data (using net transition fluxes) for alternating access rate biasing
 - `opflux_from_tflux_7B.csv`: raw operational flux data (using net transition fluxes) for substrate off-rate biasing
 
-NOTE: `make_tflux_figs.py` uses previously generated state probability expressions (located in `net_transition_flux_analysis/probability_expressions`) and pre-generated sympy expressions (located in `net_transition_flux_analysis/sympy_funcs`) to speed up code execution. To generate new expressions, data, etc. from scratch, simply delete the contents of both directories and re-run the original script.
+**NOTE:** `make_tflux_figs.py` uses previously generated state probability expressions (located in `net_transition_flux_analysis/probability_expressions`) and pre-generated sympy expressions (located in `net_transition_flux_analysis/sympy_funcs`) to speed up code execution. To generate new expressions, data, etc. from scratch, simply delete the contents of both directories and re-run the original script.
 
 An additional file (`opflux_table.xlsx`) is included which was used to compare the raw data for the operational flux calculation method comparison in the paper (Section 3.3: Operational Fluxes in Terms of Net Transition Fluxes). This file includes the raw data from both methods (cycle and transition fluxes) as well as the final table.
 
+
 #### Notebooks
 
-Included are 2 Jupyter notebooks which break down the operational fluxes for EmrE in terms of individual net cycle fluxes. `notebooks/emre_net_cycle_flux_analysis_RAA.ipynb` covers the operational fluxes under alternating access rate biasing (i.e. $R_\text{AA}$ biasing) and `notebooks/emre_net_cycle_flux_analysis_Roff.ipynb` covers the operational fluxes under substrate off-rate biasing (i.e. $R_\text{off}$ biasing). 
+Included are 2 Jupyter notebooks which break down the operational fluxes for EmrE in terms of individual net cycle fluxes:
+
+- `notebooks/emre_net_cycle_flux_analysis_RAA.ipynb`: covers the operational fluxes under alternating access rate biasing (i.e. $R_\text{AA}$ biasing)
+- `notebooks/emre_net_cycle_flux_analysis_Roff.ipynb`: covers the operational fluxes under substrate off-rate biasing (i.e. $R_\text{off}$ biasing). 
+
+
 
 ### Section 3.3: Operational Fluxes in Terms of Net Transition Fluxes
 
