@@ -2,7 +2,7 @@ Kinetic Diagram Analysis Examples
 ====================================
 [//]: # (Badges)
 ![CI](https://github.com/Becksteinlab/kda-examples/actions/workflows/main_ci.yml/badge.svg)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6437044.svg)](https://doi.org/10.5281/zenodo.6437044)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10795714.svg)](https://doi.org/10.5281/zenodo.10795714)
 
 Example code for building models using [Kinetic Diagram Analysis](https://github.com/Becksteinlab/kda).
 
