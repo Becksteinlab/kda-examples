@@ -115,6 +115,8 @@ Included are 2 Jupyter notebooks which break down the operational fluxes for Emr
 - `notebooks/emre_net_cycle_flux_analysis_RAA.ipynb`: covers the operational fluxes under alternating access rate biasing (i.e. $R_\text{AA}$ biasing)
 - `notebooks/emre_net_cycle_flux_analysis_Roff.ipynb`: covers the operational fluxes under substrate off-rate biasing (i.e. $R_\text{off}$ biasing). 
 
+Both notebooks also generate and store `.csv` files containing the net cycle fluxes for all cycles under the
+same parameter sets used in the main EmrE analysis.
 
 
 ### Section 3.3: Operational Fluxes in Terms of Net Transition Fluxes
