@@ -1,0 +1,21 @@
+function [E F D] = Expression(K)
+% User Supplies the input parameter K
+k12 = K(1)
+k13 = K(2)
+k21 = K(3)
+k23 = K(4)
+k31 = K(5)
+k32 = K(6)
+
+%% numerator 
+ E(1) = k21*k31 + k21*k32 + k31*k23;
+E(2) = k12*k31 + k12*k32 + k32*k13;
+E(3) = k13*k21 + k23*k12 + k13*k23;
+
+%% denominator
+ D = E(1) + E(2) + E(3);
+
+%% fractions 
+ F(1) = E(1)/D; 
+F(2) = E(2)/D; 
+F(3) = E(3)/D; 
