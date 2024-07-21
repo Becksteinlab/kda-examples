@@ -5,10 +5,11 @@ The included script, `comparison.py`, was written with the purpose of comparing
 `KDA` expressions to the expressions output by the `KAPattern` software using 
 `sympy`. The script uses previously pickled `NetworkX.MultiDiGraph` objects 
 created by the `KDA` [verification script](https://github.com/Becksteinlab/kda/tree/master/kda/scripts). The specific graphs included 
-here are from the data set listed in the [`kda-examples`](https://github.com/Becksteinlab/kda-examples/tree/master/kda_paper/fig_10__kda_validation_and_performance) repository
-which were generated using the [KDA Verification script](https://github.com/Becksteinlab/kda/tree/master/kda/scripts).
+here are from the data set listed in the [`kda-examples`](https://github.com/Becksteinlab/kda-examples/tree/master/kda_paper/fig_10__kda_validation_and_performance) repository.
 
-The output from our comparison run is included in `comparison_output.txt`.
+For reproducibility purposes, our pickled graph objects, input files, and
+output files are included here. The terminal output from our comparison run
+is included in `comparison_output.txt`.
 
 ## Requirements
 
