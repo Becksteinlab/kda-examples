@@ -23,11 +23,11 @@ To compare `KDA` and `KAPattern` expressions the following steps
 must be completed:
 
 1. Initial `comparison.py` run: generates the `KAPattern` input files
-   (i.e. `input_graph_X_X.txt`), plots and saves the graphs in the current
+   (e.g. `input_graph_3_1.txt`), plots and saves the graphs in the current
    working directory as `.pdf` files
 2. Using `KAPattern` and the generated input files, individually run and
    save the output files in the same format as the input files 
-   (i.e. `output_graph_X_X.txt`)
+   (e.g. `output_graph_3_1.txt`)
 3. Final `comparison.py` run: outputs the comparison results in the terminal
 
 
