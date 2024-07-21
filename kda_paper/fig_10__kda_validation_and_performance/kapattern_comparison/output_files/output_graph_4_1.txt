@@ -1,0 +1,27 @@
+function [E F D] = Expression(K)
+% User Supplies the input parameter K
+k12 = K(1)
+k13 = K(2)
+k21 = K(3)
+k23 = K(4)
+k24 = K(5)
+k31 = K(6)
+k32 = K(7)
+k34 = K(8)
+k42 = K(9)
+k43 = K(10)
+
+%% numerator 
+ E(1) = k21*k31*k42 + k21*k31*k43 + k21*k32*k42 + k21*k32*k43 + k21*k42*k34 + k31*k23*k42 + k31*k23*k43 + k31*k43*k24;
+E(2) = k12*k42*k31 + k12*k31*k43 + k12*k32*k42 + k12*k32*k43 + k12*k42*k34 + k32*k42*k13 + k32*k13*k43 + k42*k34*k13;
+E(3) = k13*k21*k42 + k13*k43*k21 + k23*k12*k42 + k23*k43*k12 + k43*k24*k12 + k13*k23*k42 + k13*k23*k43 + k13*k43*k24;
+E(4) = k24*k12*k31 + k34*k13*k21 + k24*k12*k32 + k34*k23*k12 + k24*k34*k12 + k24*k32*k13 + k34*k13*k23 + k24*k34*k13;
+
+%% denominator
+ D = E(1) + E(2) + E(3) + E(4);
+
+%% fractions 
+ F(1) = E(1)/D; 
+F(2) = E(2)/D; 
+F(3) = E(3)/D; 
+F(4) = E(4)/D; 
