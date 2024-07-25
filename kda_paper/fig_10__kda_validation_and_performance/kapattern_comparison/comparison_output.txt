@@ -1,5 +1,5 @@
 Loaded graph_3_1.pk -- MultiDiGraph with 3 nodes and 6 edges
-KDA expression generation runtime: 0.013002634048461914
+KDA expression generation runtime: 0.01700282096862793
 
 KDA vs KAPattern State Probability Expression Comparison
 ========================================
@@ -13,7 +13,7 @@ Graph: MultiDiGraph with 3 nodes and 6 edges
 
 
 Loaded graph_4_1.pk -- MultiDiGraph with 4 nodes and 10 edges
-KDA expression generation runtime: 0.03800845146179199
+KDA expression generation runtime: 0.0400087833404541
 
 KDA vs KAPattern State Probability Expression Comparison
 ========================================
@@ -28,7 +28,7 @@ Graph: MultiDiGraph with 4 nodes and 10 edges
 
 
 Loaded graph_5_1.pk -- MultiDiGraph with 5 nodes and 14 edges
-KDA expression generation runtime: 0.2800624370574951
+KDA expression generation runtime: 0.28806471824645996
 
 KDA vs KAPattern State Probability Expression Comparison
 ========================================
@@ -44,7 +44,7 @@ Graph: MultiDiGraph with 5 nodes and 14 edges
 
 
 Loaded graph_6_9.pk -- MultiDiGraph with 6 nodes and 18 edges
-KDA expression generation runtime: 8.88299560546875
+KDA expression generation runtime: 9.132805109024048
 
 KDA vs KAPattern State Probability Expression Comparison
 ========================================
@@ -73,7 +73,7 @@ k12*k24*k31*k45*k56 + k12*k24*k34*k45*k56 + k12*k24*k36*k43*k52 + k12*k24*k36*k4
 
 
 Loaded graph_7_17.pk -- MultiDiGraph with 7 nodes and 20 edges
-KDA expression generation runtime: 22.344996452331543
+KDA expression generation runtime: 22.932128190994263
 
 KDA vs KAPattern State Probability Expression Comparison
 ========================================
