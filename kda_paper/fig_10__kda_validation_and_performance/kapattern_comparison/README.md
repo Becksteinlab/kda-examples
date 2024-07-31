@@ -11,10 +11,10 @@ For reproducibility purposes, our pickled graph objects, input files, and
 output files are included here. The terminal output from our comparison run
 is included in `comparison_output.txt`.
 
-An additional script, `test_lambda_funcs.py`, was written with the purpose
+An additional script, `kda_expression_timing.py`, was written with the purpose
 of acquiring timing statistics on `KDA` state probability expression
 evaluation using the `timeit` module. The terminal output is included
-in `test_lambda_funcs_output.txt`.
+in `kda_expression_timing_output.txt`.
 
 ## Requirements
 
