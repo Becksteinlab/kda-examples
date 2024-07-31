@@ -11,6 +11,11 @@ For reproducibility purposes, our pickled graph objects, input files, and
 output files are included here. The terminal output from our comparison run
 is included in `comparison_output.txt`.
 
+An additional script, `kda_expression_timing.py`, was written with the purpose
+of acquiring timing statistics on `KDA` state probability expression
+evaluation using the `timeit` module. The terminal output is included
+in `kda_expression_timing_output.txt`.
+
 ## Requirements
 
 - `KDA v0.3.0` (see [installation instructions](https://github.com/becksteinlab/kda?tab=readme-ov-file#installation))

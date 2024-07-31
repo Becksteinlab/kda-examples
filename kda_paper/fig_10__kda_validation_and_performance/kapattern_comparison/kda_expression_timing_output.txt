@@ -1,0 +1,12 @@
+p1 for graph_3_1.pk: 0.6509433962264151
+p1 for graph_4_1.pk: 0.601078167115903
+p1 for graph_5_1.pk: 0.12680580993330134
+p1 for graph_6_9.pk: 0.11775823933656415
+p1 for graph_7_17.pk: 0.05657205540471514
+Average runtimes for 1000 iterations
+----------------------------------------
+graph_3_1.pk:  9.9e-07
+graph_4_1.pk:  3.4e-06
+graph_5_1.pk:  1.7e-05
+graph_6_9.pk:  6.4e-05
+graph_7_17.pk:  1.2e-04

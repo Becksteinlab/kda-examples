@@ -4,6 +4,7 @@ import sys
 sys.setrecursionlimit(5000)
 import os
 
+import time
 import pickle
 from sympy import fraction
 from sympy.parsing.sympy_parser import parse_expr
@@ -104,7 +105,10 @@ def main():
 			# convert strings to sympy expressions
 			KAP_prob_exprs = [parse_expr(e) for e in mult_exprs]
 
+			start = time.time()
 			KDA_prob_exprs = calculations.calc_state_probs(G=G, key="name", output_strings=True)
+			KDA_runtime = time.time() - start
+			print(f"KDA expression generation runtime: {KDA_runtime}")
 			# retrieve the numerator from each normalized state probability expression
 			KDA_prob_exprs = [fraction(e)[0] for e in KDA_prob_exprs]
 
